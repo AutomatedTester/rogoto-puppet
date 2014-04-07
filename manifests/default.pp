@@ -23,7 +23,7 @@ service { "apache2":
 }
 
 
-vcsrepo { "/home/vagrant/rogoto-http/":
+vcsrepo { "/tmp/rogoto-http/":
     require => Package['git'],
     ensure => present,
     provider => git,
