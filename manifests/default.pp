@@ -1,4 +1,3 @@
-include vcsrepo
 exec { "apt-get update":
   path => "/usr/bin",
 }
@@ -24,7 +23,7 @@ service { "apache2":
 }
 
 
-vcsrepo { "~/rogoto-http/":
+vcsrepo { "/home/vagrant/rogoto-http/":
     require => Package['git'],
     ensure => present,
     provider => git,
