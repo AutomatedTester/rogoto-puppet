@@ -1,9 +1,9 @@
-exec { "apt-get update":
+exec { "sudo apt-get update":
   path => "/usr/bin",
 }
 package { "apache2":
   ensure  => present,
-  require => Exec["apt-get update"],
+  require => Exec["sudo apt-get update"],
 }
 
 service { "apache2":
@@ -13,17 +13,17 @@ service { "apache2":
 
 package { "python-dev":
   ensure => installed,
-  require => Exec["apt-get update"]
+  require => Exec["sudo apt-get update"]
 }
 
 package { "python-pip":
   ensure => installed,
-  require => Exec["apt-get update"]
+  require => Exec["sudo apt-get update"]
 }
 
 package { 'git':
   ensure => installed,
-  require => Exec["apt-get update"]
+  require => Exec["sudo apt-get update"]
 }
 
 vcsrepo { "/tmp/rogoto-http/":
