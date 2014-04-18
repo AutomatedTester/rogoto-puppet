@@ -1,6 +1,7 @@
 exec { "sudo apt-get update":
   path => "/usr/bin",
 }
+
 package { "apache2":
   ensure  => present,
   require => Exec["sudo apt-get update"],
@@ -9,6 +10,11 @@ package { "apache2":
 service { "apache2":
   ensure  => "running",
   require => Package["apache2"],
+}
+
+package { "libapache2-mod-wsgi":
+  ensure  => present,
+  require => Exec["sudo apt-get update"]
 }
 
 package { 'git':
