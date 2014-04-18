@@ -5,7 +5,8 @@ Vagrant::Config.run do |config|
     shell.inline = "mkdir -p /etc/puppet/modules;
                     puppet module install puppetlabs-vcsrepo
                     puppet module install puppetlabs/nodejs;
-                    puppet module install puppetlabs/apache"
+                    puppet module install puppetlabs/apache;
+                    puppet module install stankevich-python;"
   end
   config.vm.provision :puppet
   config.vm.forward_port 80, 3000
