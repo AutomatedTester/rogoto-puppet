@@ -12,15 +12,15 @@ service { "apache2":
 }
 
 package { 'git':
-  ensure => installed,
+  ensure  => installed,
   require => Exec["sudo apt-get update"]
 }
 
 vcsrepo { "/tmp/rogoto-http/":
-    require => Package['git'],
-    ensure => present,
+    require  => Package['git'],
+    ensure   => present,
     provider => git,
-    source => "https://github.com/AutomatedTester/rogoto-http.git"
+    source   => "https://github.com/AutomatedTester/rogoto-http.git"
 }
 
 class { 'python':
