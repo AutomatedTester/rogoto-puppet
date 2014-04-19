@@ -2,31 +2,16 @@ exec { "sudo apt-get update":
   path => "/usr/bin",
 }
 
-package { "apache2":
-  ensure  => present,
-  require => Exec["sudo apt-get update"],
-}
-
-service { "apache2":
-  ensure  => "running",
-  require => Package["apache2"],
-}
-
-package { "libapache2-mod-wsgi":
-  ensure  => present,
-  require => Exec["sudo apt-get update"]
-}
-
 package { 'git':
   ensure  => installed,
   require => Exec["sudo apt-get update"]
 }
 
 vcsrepo { "/tmp/rogoto-http/":
-    require  => Package['git'],
-    ensure   => present,
-    provider => git,
-    source   => "https://github.com/AutomatedTester/rogoto-http.git"
+  require  => Package['git'],
+  ensure   => present,
+  provider => git,
+  source   => "https://github.com/AutomatedTester/rogoto-http.git"
 }
 
 class { 'python':
@@ -45,4 +30,24 @@ python::virtualenv { '/tmp/http_venv':
   cwd          => '/tmp/rogoto-http',
   timeout      => 0,
   require      => Vcsrepo["/tmp/rogoto-http/"]
+}
+
+class { 'apache': }
+
+apache::vhost { 'rogoto.com':
+  port                    => '3000',
+  docroot                 => '/tmp/rogoto-http/',
+  wsgi_application_group  => '%{GLOBAL}',
+  wsgi_daemon_process     => 'rogoto',
+  wsgi_script_aliases     => { '/' => ' /tmp/rogoto-http' }
+}
+
+class { 'apache::mod::wsgi':
+  wsgi_socket_prefix => "\${APACHE_RUN_DIR}WSGI",
+  wsgi_python_home   => '/tmp/http_venv',
+  wsgi_python_path   => '/tmp/http_venv/site-packages',
+}
+package { "libapache2-mod-wsgi":
+  ensure  => present,
+  require => Exec["sudo apt-get update"]
 }
