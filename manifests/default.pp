@@ -1,5 +1,15 @@
+user { "rogoto":
+  comment => "rogoto",
+  home => "/home/rogoto",
+  ensure => present,
+  #shell => "/bin/bash",
+  #uid => '501',
+  #gid => '20'
+}
+
 exec { "sudo apt-get update":
-  path => "/usr/bin",
+  path => "/usr/bin:/usr/sbin:/bin:/usr/local/bin",
+  require => User["rogoto"]
 }
 
 package { 'git':
@@ -7,7 +17,7 @@ package { 'git':
   require => Exec["sudo apt-get update"]
 }
 
-vcsrepo { "/tmp/rogoto-http/":
+vcsrepo { "/home/rogoto/rogoto-http/":
   require  => Package['git'],
   ensure   => present,
   provider => git,
@@ -21,32 +31,33 @@ class { 'python':
   pip        => true,
 }
 
-python::virtualenv { '/tmp/http_venv':
+python::virtualenv { '/home/rogoto/http_venv':
   ensure       => present,
   version      => 'system',
-  requirements => '/tmp/rogoto-http/requirements.txt',
+  requirements => '/home/rogoto/rogoto-http/requirements.txt',
   systempkgs   => true,
   distribute   => false,
-  cwd          => '/tmp/rogoto-http',
+  cwd          => '/home/rogoto/rogoto-http',
   timeout      => 0,
-  require      => Vcsrepo["/tmp/rogoto-http/"]
+  require      => Vcsrepo["/home/rogoto/rogoto-http/"]
 }
 
 class { 'apache': }
 
 apache::vhost { 'rogoto.com':
   port                    => '3000',
-  docroot                 => '/tmp/rogoto-http/',
+  docroot                 => '/home/rogoto/rogoto-http/',
   wsgi_application_group  => '%{GLOBAL}',
-  wsgi_daemon_process     => 'rogoto',
-  wsgi_script_aliases     => { '/' => ' /tmp/rogoto-http' }
+  wsgi_daemon_process     => 'rogoto python-path=/home/rogoto/http_venv/lib/python2.7/site-packages processes=1 threads=1 maximum-requests=1',
+  wsgi_script_aliases     => { '/' => '/home/rogoto/rogoto-http/rogoto.wsgi' }
 }
 
 class { 'apache::mod::wsgi':
   wsgi_socket_prefix => "\${APACHE_RUN_DIR}WSGI",
-  wsgi_python_home   => '/tmp/http_venv',
-  wsgi_python_path   => '/tmp/http_venv/site-packages',
+  wsgi_python_home   => '/home/rogoto/http_venv',
+  wsgi_python_path   => '/home/rogoto/http_venv/site-packages',
 }
+
 package { "libapache2-mod-wsgi":
   ensure  => present,
   require => Exec["sudo apt-get update"]
