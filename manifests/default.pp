@@ -47,8 +47,7 @@ class { 'apache': }
 apache::vhost { 'rogoto.com':
   port                    => '3000',
   docroot                 => '/home/rogoto/rogoto-http/',
-  wsgi_application_group  => '%{GLOBAL}',
-  wsgi_daemon_process     => 'rogoto python-path=/home/rogoto/http_venv/lib/python2.7/site-packages processes=1 threads=1 maximum-requests=1',
+  wsgi_daemon_process     => 'rogoto python-path=/home/rogoto/rogoto-http:/home/rogoto/http_venv/lib/python2.7/site-packages processes=1 threads=1 maximum-requests=1',
   wsgi_script_aliases     => { '/' => '/home/rogoto/rogoto-http/rogoto.wsgi' }
 }
 
