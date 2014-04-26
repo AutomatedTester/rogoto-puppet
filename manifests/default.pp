@@ -61,3 +61,23 @@ package { "libapache2-mod-wsgi":
   ensure  => present,
   require => Exec["sudo apt-get update"]
 }
+
+package { "python-serial":
+  ensure => installed,
+  require => Exec["sudo apt-get update"]
+}
+
+package { "python-rpi.gpio":
+  ensure => installed,
+  require => Exec["sudo apt-get update"]
+}
+
+package { "python-smbus":
+  ensure => installed,
+  require => Exec["sudo apt-get update"]
+}
+
+package { "libi2c-dev":
+  ensure => installed,
+  require => Exec["sudo apt-get update"]
+}
