@@ -87,6 +87,7 @@ package { "libi2c-dev":
 exec { "gpio":
   command => "gpio load i2c 10",
   path => "/usr/bin:/usr/sbin:/bin:/usr/local/bin",
+  require => Package["libi2c-dev"]
 }
 
 augeas { "/etc/inittab#respawn":
