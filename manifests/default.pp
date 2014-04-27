@@ -1,3 +1,5 @@
+include augeas
+
 user { "rogoto":
   comment => "rogoto",
   home => "/home/rogoto",
@@ -80,4 +82,35 @@ package { "python-smbus":
 package { "libi2c-dev":
   ensure => installed,
   require => Exec["sudo apt-get update"]
+}
+
+exec { "gpio":
+  command => "gpio load i2c 10",
+  path => "/usr/bin:/usr/sbin:/bin:/usr/local/bin",
+}
+
+augeas { "/etc/inittab#respawn":
+  changes => [ "rm T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100"],
+  context => "/files/etc/inittab"
+}
+
+augeas { "init_uart_clock":
+  changes => ["set init_uart_clock '32000000'"],
+  context => "/files/boot/config.txt"
+}
+
+augeas { "/boot/cmdline.txt":
+  changes => ["rm console=ttyAMA0,115200 kgdboc=ttyAMA0,115200"],
+  context => "/files/boot/cmdline.txt"
+}
+
+augeas { "/etc/modprobe.d/raspi-blacklist.conf":
+  changes => ["rm blacklist i2c-bcm2708"],
+  context => "/files/etc/modprobe.d/raspi-blacklist.conf"
+}
+
+augeas { "/etc/modules":
+  changes => ["set i2c-dev"],
+  context => "/etc/modules"
+
 }

@@ -3,10 +3,12 @@ Vagrant::Config.run do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
   config.vm.provision :shell do |shell|
     shell.inline = "mkdir -p /etc/puppet/modules;
-                    puppet module install puppetlabs-vcsrepo
+                    puppet module install puppetlabs-vcsrepo;
                     puppet module install puppetlabs/nodejs;
                     puppet module install puppetlabs/apache;
-                    puppet module install stankevich-python;"
+                    puppet module install stankevich-python;
+                    puppet module install camptocamp-augeas;
+                    sudo apt-get update && sudo apt-get install puppet -y;"
   end
   config.vm.provision :puppet
   config.vm.forward_port 80, 3000
