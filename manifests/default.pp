@@ -66,12 +66,17 @@ package { "python-rpi.gpio":
 
 package { "python-smbus":
   ensure => installed,
-  require => Exec["sudo apt-get update"]
+  require => Augeas["/etc/modules"]
 }
 
 package { "libi2c-dev":
   ensure => installed,
   require => Exec["sudo apt-get update"]
+}
+
+package { "i2c-tools":
+  ensure => installed,
+  require => Augeas["/etc/modules"]
 }
 
 exec { "gpio":
