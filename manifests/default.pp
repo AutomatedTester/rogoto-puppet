@@ -101,7 +101,7 @@ augeas { "/etc/modprobe.d/raspi-blacklist.conf":
 }
 
 augeas { "/etc/modules":
-  changes => ["set i2c-dev"],
+  changes => ["set i2c-dev ''"],
   context => "/etc/modules"
 
 }
