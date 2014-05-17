@@ -16,6 +16,24 @@ vcsrepo { "/var/www/rogoto-http/":
   source   => "https://github.com/AutomatedTester/rogoto-http.git"
 }
 
+package { "curl":
+  ensure  => installed,
+  require => Exec["sudo apt-get update"]
+}
+
+package { "unzip":
+  ensure => installed,
+  require => Exec["sudo apt-get update"]
+}
+
+archive { "wiringPi":
+  ensure    => present,
+  url       => "https://github.com/DexterInd/BrickPi/blob/master/Setup%20Files/wiringPi.zip?raw=true",
+  extension => "zip",
+  target => '/tmp/wiringPi',
+  checksum  => false
+}
+
 class { 'python':
   version    => 'system',
   dev        => true,

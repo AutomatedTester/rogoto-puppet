@@ -8,6 +8,7 @@ Vagrant::Config.run do |config|
                     puppet module install puppetlabs/apache;
                     puppet module install stankevich-python;
                     puppet module install camptocamp-augeas;
+                    puppet module install camptocamp-archive;
                     sudo apt-get update && sudo apt-get install puppet -y;"
   end
   config.vm.provision :puppet

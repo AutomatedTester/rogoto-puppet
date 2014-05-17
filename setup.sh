@@ -4,3 +4,4 @@ puppet module install puppetlabs/nodejs;
 puppet module install puppetlabs/apache;
 puppet module install stankevich-python;
 puppet module install camptocamp-augeas;
+puppet module install camptocamp-archive;
